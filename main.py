@@ -19,6 +19,8 @@ async def on_startup(_):
     print('Бот вышел в онлайн')
 
 client.handlers_client(dp)
-other.handeler_other(dp)
+admin.register_handlers_admin(dp)
+other.handler_other(dp)
+
 if __name__ == '__main__':
     executor.start_polling(dp, on_startup=on_startup)
