@@ -1,5 +1,6 @@
 from aiogram import types, Dispatcher
 from bot import bot, dp
+from buttons import button_client
 
 
 # @dp.message_handler(commands=['start'])
@@ -8,7 +9,7 @@ async def process_start_command(msg: types.Message):
                            'Привет!\nЭтот телеграм-бот предназначен для того, чтобы помочь владельцам пропавших'
                            'домашних животных находить их быстрее. Бот хранит базу данных о пропавших животных,'
                            'которая постоянно '
-                           'пополняется людьми.')
+                           'пополняется людьми.', reply_markup=button_client)
 
 
 # @dp.message_handler(commands=['help'])
