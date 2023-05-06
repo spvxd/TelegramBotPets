@@ -1,6 +1,7 @@
 from aiogram import types, Dispatcher
 from bot import bot, dp
 from buttons import button_client
+from database import database
 
 
 # @dp.message_handler(commands=['start'])
@@ -37,6 +38,11 @@ async def process_feedback(msg: types.Message):
     await bot.send_message(msg.from_user.id, "Обратная связь")
 
 
+@dp.message_handler(commands=['show'])
+async def process_show(msg: types.Message):
+    await database.database_read(msg)
+
+
 def handlers_client(dp : Dispatcher):
     dp.register_message_handler(process_start_command, commands=['start'])
     dp.register_message_handler(process_help_command, commands=['help'])
@@ -44,3 +50,4 @@ def handlers_client(dp : Dispatcher):
     dp.register_message_handler(process_add_new, commands=['add'])
     dp.register_message_handler(process_show_pets, commands=['show'])
     dp.register_message_handler(process_feedback, commands=['feedback'])
+    dp.register_message_handler(process_show, commands=['show'])
