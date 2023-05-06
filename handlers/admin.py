@@ -4,6 +4,7 @@ from aiogram import types, Dispatcher
 from bot import bot, dp
 from aiogram.dispatcher.filters import Text
 from database import database
+from buttons import admin_buttons
 ID = None
 
 
@@ -18,7 +19,7 @@ class FSMAdmin(StatesGroup):
 async def make_changes(msg: types.Message):
     global ID
     ID = msg.from_user.id
-    await bot.send_message(msg.from_user.id, 'Админка')
+    await bot.send_message(msg.from_user.id, 'Админка', reply_markup=admin_buttons.buttons_admin)
     await msg.delete()
 
 
