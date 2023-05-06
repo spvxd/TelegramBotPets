@@ -3,7 +3,7 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram import types, Dispatcher
 from bot import bot, dp
 from aiogram.dispatcher.filters import Text
-
+from database import database
 ID = None
 
 
@@ -71,10 +71,9 @@ async def load_phone(msg: types.Message, state: FSMContext):
     if msg.from_user.id == ID:
         async with state.proxy() as data:
             data['phone'] = msg.text
-
-        async with state.proxy() as data:
-            await msg.reply(str(data))
+        await database.database_command(state)
         await state.finish()
+        await msg.reply('Данные отправлены')
 
 
 def register_handlers_admin(dp: Dispatcher):

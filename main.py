@@ -1,22 +1,12 @@
 from bot import dp
 from aiogram.utils import executor
-import sqlite3
 from handlers import client, admin, other
-con = sqlite3.connect('pets.db')
-cursor = con.cursor()
-
-
-def db_manipulation():
-    cursor.execute("""CREATE TABLE IF NOT EXISTS pets (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, age INTEGER)""")
-
-    cursor.execute("""INSERT INTO pets (name, age) VALUES ('Sanya', '20')""")
-    con.commit()
-
-    # cursor.execute("""DROP TABLE pets""")
+from database import database
 
 
 async def on_startup(_):
     print('Бот вышел в онлайн')
+    database.db_manipulation()
 
 client.handlers_client(dp)
 admin.register_handlers_admin(dp)
