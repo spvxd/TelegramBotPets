@@ -1,5 +1,5 @@
 import sqlite3
-
+from bot import bot, dp
 def db_manipulation():
     global con, cursor
     con = sqlite3.connect("database.db")
@@ -19,3 +19,8 @@ async def database_command(state):
     async with state.proxy() as data:
         cursor.execute("""INSERT INTO telegram VALUES (?, ?, ?, ?)""", tuple(data.values()))
         con.commit()
+
+
+async def database_read(msg):
+    for ret in cursor.execute("""SELECT * FROM telegram""").fetchall():
+        await bot.send_photo(msg.from_user.id, ret[0], f'Имя:{ret[1]}\nОписание:{ret[2]}\nКонтакты:{ret[-1]}')
