@@ -5,6 +5,7 @@ from bot import bot, dp
 from aiogram.dispatcher.filters import Text
 from database import database
 from buttons import admin_buttons
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 ID = None
 
 
@@ -77,6 +78,20 @@ async def load_phone(msg: types.Message, state: FSMContext):
         await msg.reply('Данные отправлены')
 
 
+@dp.callback_query_handler(lambda x: x.data and x.data.startswith('del '))
+async def del_callback_run(callback_query: types.CallbackQuery):
+    await database.database_delete(callback_query.data.replace('del ', ''))
+    await callback_query.answer(text=f'{callback_query.data.replace("del ", "")} удалена', show_alert=True)
+
+
+# @dp.message_handler(commands='Удалить')
+async def delete_item(msg: types.Message):
+    if msg.from_user.id == ID:
+        read = await database.database_read_all()
+        for ret in read:
+            await bot.send_photo(msg.from_user.id, ret[0], f'{ret[1]}\nИмя:{ret[2]}\nОписание:{ret[3]}')
+            await bot.send_message(msg.from_user.id, text='^^^', reply_markup=InlineKeyboardMarkup().add(InlineKeyboardButton(f'Удалить{ret[1]}', callback_data=f'del {ret[1]}' )))
+
 def register_handlers_admin(dp: Dispatcher):
     dp.register_message_handler(process_cm_start, commands=['upload'], state=None)
     dp.register_message_handler(cancel_handler, state="*", commands='Отмена')
@@ -86,3 +101,4 @@ def register_handlers_admin(dp: Dispatcher):
     dp.register_message_handler(load_description, state=FSMAdmin.description)
     dp.register_message_handler(load_phone, state=FSMAdmin.phone)
     dp.register_message_handler(make_changes, commands=['Moderator'], is_chat_admin=True)
+    dp.register_message_handler(delete_item, commands=['Удалить'])

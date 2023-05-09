@@ -2,7 +2,7 @@ from bot import dp
 from aiogram.utils import executor
 from handlers import client, admin, other
 from database import database
-
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 async def on_startup(_):
     print('Бот вышел в онлайн')
